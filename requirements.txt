@@ -1,0 +1,25 @@
+# RAG Pipeline — Oxford Handbook of Clinical Haematology
+# Install with:  pip install -r requirements.txt
+
+# ── Core dependencies ─────────────────────────────────────────────
+google-generativeai>=0.7.0          # Gemini API
+
+langchain>=0.2.0
+langchain-community>=0.2.0
+langchain-huggingface>=0.0.3
+langchain-text-splitters>=0.2.0
+
+faiss-cpu>=1.8.0                    # Local FAISS vector store (CPU build)
+# faiss-gpu                         # Uncomment if you have a CUDA GPU
+
+sentence-transformers>=3.0.0        # Required by HuggingFaceEmbeddings
+transformers>=4.40.0
+torch>=2.2.0                        # CPU wheels are fine for embeddings
+
+pypdf>=4.0.0                        # PDF loader backend
+pymupdf>=1.24.0                     # Faster alternative (optional)
+
+# ── Evaluation helpers ────────────────────────────────────────────
+scikit-learn>=1.4.0                 # cosine_similarity
+pandas>=2.2.0
+numpy>=1.26.0
