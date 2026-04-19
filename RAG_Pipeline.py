@@ -183,6 +183,7 @@ class Pipeline:
         history: str,
         question: str,
         template: str = "",
+        patient_report="",
     ) -> str:
         """
         Assemble the full prompt string from context, history and question.
@@ -190,6 +191,10 @@ class Pipeline:
         A custom template can be supplied; otherwise the default clinical
         assistant template is used.
         """
+        if patient_report:
+            patient_section = f"\n\n### Patient Report:\n{patient_report}\n"
+        else:
+            patient_section = ""
         if not template:
             template = """
 ### System:
@@ -247,16 +252,17 @@ You are an empathetic and expert Clinical Haematology Assistant, specialized in 
 
 ### Relevant context from the Oxford Handbook of Clinical Haematology:
 {context}
-
+###If the user's question references specific patient details, include a "Patient Report" section in the prompt with that information. Otherwise, omit this section entirely.
+{report_section}
 ### User question:
 {question}
 
-### Clinical Assistant:
+### Clinical Assistant (Patient-Friendly Response):
 """
         return template.format(history=history, context=context, question=question)
 
     # ── main chat method ──────────────────────
-    def llm_response(self, question: str) -> str:
+    def llm_response(self, question: str, patient_report: str = "") -> str:
         """
         Full RAG turn:  retrieve → build prompt → call Gemini → return answer.
 
@@ -280,6 +286,7 @@ You are an empathetic and expert Clinical Haematology Assistant, specialized in 
             context=context,
             history=history_str,
             question=question,
+            patient_report=patient_report
         )
         self._log("FULL PROMPT SENT TO GEMINI", prompt)
 
